@@ -10,9 +10,12 @@ test('Strest Command Line', async () => {
   // // Validation Error
   // const failureRequest2 = spawnSync('node', ['dist/main.js', 'tests/failure/failureRequest1.strest.yaml'])
 
+  // // Using form data
+  // const formDataRequest = spawnSync('node', ['dist/main.js', 'tests/success/successRequestsWithFormData.strest.yaml'])  
 
   // expect(successRequest.status).toBe(0);
   // expect(bundledSuccessRequest.status).toBe(0);
+  // expect(formDataRequest.status).toBe(0);
 
   // expect(failureRequest1.status).toBe(1);
   // expect(failureRequest2.status).toBe(1);
