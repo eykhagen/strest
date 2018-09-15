@@ -443,7 +443,6 @@ const performRequest = async (requestObject: requestObjectSchema, requestName: s
     return {isError: false, message: null, code: 0}
   
   } catch(e) {
-    console.error(e);
     return { isError: true, message: e, code: 1}
   }
   
