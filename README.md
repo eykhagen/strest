@@ -186,6 +186,9 @@ requests:
 ```
 Visit [Faker.js Documentation](http://marak.github.io/faker.js/) for more methods
 
+## Sending files and form data
+Sending files and form data is easy. use form type in the data prop.
+
 ## Response Validation
 With **Strest** you can validate responses either by a specific value or by a `Type`. _[List of all valid Types](VALIDATION.md)_
 

@@ -12,6 +12,7 @@
     - [`validate`](#validate)
       - [`raw`](#validate)
       - [`json`](#validate)
+      - [`form`](#validate)
     - [`log`](#log)
 
 
@@ -72,7 +73,7 @@ someGetRequest:
 ```
 
 ### `data`
-Specify data that you want to be sent with the request. This data can be formatted either `raw` or as `json`. You may only use one of those keys in a request.
+Specify data that you want to be sent with the request. This data can be formatted either `raw` , `json` or `form`. You may only use one of those keys in a request.
 
 However, `params` can always be added. They'll be added to the request's URL.
 
@@ -95,6 +96,16 @@ someRequest:
   data:
     raw: 'Some raw data to be sent'
 
+# Form Data Example
+someRequest:
+  url: ...
+  method: ...
+  data:
+    form:
+      title: foo
+      body: bar
+      sampleFile: File(tests/strest.png)
+      
 # Params as a string Example
 someRequest:
   url: ...
