@@ -1,0 +1,16 @@
+version: 1
+
+requests:
+  jsonpath:
+    url: https://jsonplaceholder.typicode.com/posts
+    method: POST
+    data:
+      json:
+        myArray:
+        - foo: 1
+          bar: 1
+        - foo: 2
+          bar: 2
+    validate:
+      jsonpath:
+        myArray.1.foo: 2
