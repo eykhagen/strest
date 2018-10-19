@@ -7,6 +7,7 @@
 - [`allowInsecure`](#allowinsecure)
 - [`requests` **_Required_**](#requests-_required_)
     - [`request` **_At least one request is required_**](#request-_at-least-one-request-is-required_)
+        - [`if`](#if)
         - [`url` **_Required_**](#url-_required_)
         - [`method` **_Required_**](#method-_required_)
         - [`delay`](#delay)
@@ -89,6 +90,34 @@ this will also overwrite the response data and you'll no longer be able to retri
 requests:
   someRequestName: # <- a Request
     ..
+```
+
+#### `if`
+
+This provides conditional execution of a request.
+
+```yaml
+version: 1
+
+requests:
+  if_Set:
+    url: https://jsonplaceholder.typicode.com/posts
+    method: POST
+    data:
+      json:
+        foo: 1
+  skipped:
+    if:
+      operand: Value(if_Set.foo)
+      equals: 2
+    url: https://jsonplaceholder.typicode.com/todos/2
+    method: GET
+  executed:
+    if:
+      operand: Value(if_Set.foo)
+      equals: 1
+    url: https://jsonplaceholder.typicode.com/todos/2
+    method: GET
 ```
 
 #### `url` **_Required_**

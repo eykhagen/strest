@@ -79,8 +79,24 @@ export const performTests = async (testObjects: object[], printAll: boolean) =>Â
 
             const spinner = ora(`Testing ${chalk.bold(colorizeMain(requestName))}`).start();
             const startTime = new Date().getTime();
-            
-            let error = await performRequest(val, requestName, printAll);
+            let result = "succeeded"
+
+            let error = computeRequestObject(val, requestReponses);
+
+            if(error !== null) {
+              // pass
+            } else {
+              if(typeof val.if !== 'undefined'){
+                if(val.if.operand == val.if.equals){
+                  error = await performRequest(val, requestName, printAll);
+                } else {
+                  result = "skipped"
+                  error = { isError: false, message: null, code: 0 }
+                }
+              } else {
+                error = await performRequest(val, requestName, printAll);
+              }
+            }
 
             const endTime = new Date().getTime();
             const execTime = (endTime - startTime) / 1000;
@@ -112,14 +128,14 @@ export const performTests = async (testObjects: object[], printAll: boolean) =>Â
                 }
 
                 spinner.succeed(
-                  `Testing ${chalk.bold(colorizeMain(requestName))} succeeded (${chalk.bold(`${execTime.toString()}s`)})` +
+                  `Testing ${chalk.bold(colorizeMain(requestName))} ${result} (${chalk.bold(`${execTime.toString()}s`)})` +
                   `\n\n${colorizeMain('Status')}: ${res.status}`+
                   `\n${colorizeMain('Status Text')}: ${res.statusText}` +
                   `\n\n${colorizeMain('Headers')}: \n\n${chalk.hex(config.secondaryColor)(JSON.stringify(res.headers, null ,2))}` +
                   `${dataString}`
                 )
               } elseÂ {
-                spinner.succeed(`Testing ${chalk.bold(colorizeMain(requestName))} succeeded (${chalk.bold(`${execTime.toString()}s`)})`)
+                spinner.succeed(`Testing ${chalk.bold(colorizeMain(requestName))} ${result} (${chalk.bold(`${execTime.toString()}s`)})`)
               }
               break
             }
@@ -503,11 +519,6 @@ const validateCode = (validateSchema: any, code: any) => {
  * @param printAll If true, all response information will be logged in the console
  */
 const performRequest = async (requestObject: requestObjectSchema, requestName: string, printAll: boolean) => {
-
-  const error = computeRequestObject(requestObject, requestReponses);
-  if(error !== null) {
-    return { isError: true, message: error, code: 1}
-  }
 
   // parse the requestObject
   // let requestMethod: string, requestData: any, requestUrl: string, requestHeaders: any, requestParams: string;
