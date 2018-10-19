@@ -7,17 +7,20 @@
 - [`allowInsecure`](#allowinsecure)
 - [`requests` **_Required_**](#requests-_required_)
     - [`request` **_At least one request is required_**](#request-_at-least-one-request-is-required_)
-    - [`url` **_Required_**](#url-_required_)
-    - [`method` **_Required_**](#method-_required_)
-    - [`delay`](#delay)
-    - [`data`](#data)
-        - [`json`](#json)
-        - [`raw`](#raw)
-        - [`params`](#params)
-    - [`headers`](#headers)
-    - [`validate`](#validate)
-        - [`code`](#code)
-    - [`log`](#log)
+        - [`url` **_Required_**](#url-_required_)
+        - [`method` **_Required_**](#method-_required_)
+        - [`delay`](#delay)
+        - [`data`](#data)
+            - [`json`](#json)
+            - [`raw`](#raw)
+            - [`params`](#params)
+        - [`headers`](#headers)
+        - [`validate`](#validate)
+            - [`raw`](#raw-1)
+            - [`json`](#json-1)
+            - [`code`](#code)
+            - [`jsonpath`](#jsonpath)
+        - [`log`](#log)
 
 <!-- /TOC -->
 
@@ -88,7 +91,7 @@ requests:
     ..
 ```
 
-### `url` **_Required_**
+#### `url` **_Required_**
 
 The target URL to which the request will be sent to. _Needs to start with `http` or `https`_
 
@@ -102,7 +105,7 @@ someConnectedRequest:
   url: http://localhost:3000/api/user/Value(getUser.id)/friends
 ```
 
-### `method` **_Required_**
+#### `method` **_Required_**
 
 The HTTP request method that will be used Strest to perform the request. All strings are accepted but consider to use one of the requests listed in the [Mozilla Developer Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 
@@ -117,7 +120,7 @@ someGetRequest:
   method: GET
 ```
 
-### `delay`
+#### `delay`
 
 If present, the execution of the request will be delayed by the specified number of milliseconds.
 
@@ -129,13 +132,13 @@ someRequest:
   method: ...
 ```
 
-### `data`
+#### `data`
 
 Specify data that you want to be sent with the request. This data can be formatted either `raw` or as `json`. You may only use one of those keys in a request.
 
 However, `params` can always be added. They'll be added to the request's URL.
 
-#### `json`
+##### `json`
 
 ```yaml
 # JSON Example
@@ -150,7 +153,7 @@ someRequest:
         nestedKey: false
 ```
 
-#### `raw`
+##### `raw`
 
 ```yaml
 # Raw Data Example
@@ -161,7 +164,7 @@ someRequest:
     raw: 'Some raw data to be sent'
 ```
 
-#### `params`
+##### `params`
 
 ```yaml
 # Params as a string Example
@@ -183,7 +186,7 @@ someRequest:
       password: test123
 ```
 
-### `headers`
+#### `headers`
 
 Specify HTTP headers that you want to be sent with the request. Formatted as an Object.
 
@@ -206,14 +209,23 @@ someRequest:
 
 ```
 
-### `validate`
+#### `validate`
 
 Validate the incoming response either by a specific value or by a [`Type`](VALIDATION.md).
 [More information](README.md#ResponseValidation) about how to validate responses.
 
-#### `code`
+##### `raw`
+
+Validate a response against a raw
+
+##### `json`
+
+Validate response against a json
+
+##### `code`
 
 Expect the returned status code to be a specific number or in a range of numbers.
+
 ```yaml
 # Example (simple)
 someRequest:
@@ -229,7 +241,32 @@ someRequest:
     code: 2xx # expect the request to return a response code which is in the range of 200-299
 ```
 
-### `log`
+##### `jsonpath`
+
+Specify a [jsonpath](https://github.com/dchester/jsonpath#jpvalueobj-pathexpression-newvalue) lookup.  The first match from the jsonpath is evaluated.  This currently deos not support objects.
+
+```yml
+version: 1
+
+requests:
+  jsonpath:
+    url: https://jsonplaceholder.typicode.com/posts
+    method: POST
+    data:
+      json:
+        myArray:
+        - foo: 1
+          bar: 1
+        - foo: 2
+          bar: 2
+    validate:
+      jsonpath:
+        myArray.1.foo: 2
+```
+
+Read [jsonpath](https://github.com/dchester/jsonpath#jpvalueobj-pathexpression-newvalue) for more info and see [this file](tests/success/validate/jsonpath.strest.yml) for more complex example
+
+#### `log`
 
 If set to `true`, the following information will be logged into the console for this request.
 
