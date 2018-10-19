@@ -23,3 +23,4 @@ requests:
         $.age: 26
         address.city: Nara
         $.phoneNumbers[?(@.type == "home")].number: "0123-4567-8910"
+      code: 2xx

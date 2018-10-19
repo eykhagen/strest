@@ -26,6 +26,13 @@ yarn global add strest-cli
 npm i -g strest-cli
 ```
 
+```bash
+# Via Docker
+docker build -t strest:dev .
+docker run --env STREST_URL=https://jsonplaceholder.typicode.com -v ${PWD}:/data strest:dev /data/tests/success/Env/
+docker run -v ${PWD}:/data strest:dev /data/tests/success/chaining/
+```
+
 We'll be using the [postman-echo](https://docs.postman-echo.com) test API in this tutorial.
 
 To get started, we're using [this file](tests/success/postman.strest.yml) _(The extension needs to be `.strest.yml` or `.strest.yaml`)_
@@ -329,15 +336,6 @@ config:
   secondaryColor: "#ff4757" # Hexadecimal Color Code
   errorColor: "#576574" # Hexadecimal Color Code
 
-```
-
-## Docker
-
-Use docker instead of setting up node.
-
-```bash
-docker build -t strest:dev .
-docker run --env testURL=https://jsonplaceholder.typicode.com -v ${PWD}:/data strest:dev /data/tests/success/successRequestEnv.strest.yaml
 ```
 
 ## License
