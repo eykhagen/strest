@@ -262,7 +262,7 @@ requests:
         myArray.1.foo: 2
 ```
 
-Read [jsonpath](https://github.com/dchester/jsonpath#jpvalueobj-pathexpression-newvalue) for more info
+Read [jsonpath](https://github.com/dchester/jsonpath#jpvalueobj-pathexpression-newvalue) for more info and see [this file](tests/success/validate/jsonpath.strest.yml) for more complex example
 
 ### Header Validation
 
