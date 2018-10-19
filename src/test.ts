@@ -575,7 +575,8 @@ const performRequest = async (requestObject: requestObjectSchema, requestName: s
     } 
 
     if(typeof requestObject.validate !== 'undefined') {
-      if(requestObject.validate.code){
+
+      if(typeof requestObject.validate.code !== 'undefined'){
         const err = validateCode(requestObject.validate, response.status);
         if(err !== null) {
           return { isError: true, message: err, code: 1 }
@@ -612,7 +613,7 @@ const performRequest = async (requestObject: requestObjectSchema, requestName: s
   } catch(e) {
     if(typeof requestObject.validate !== 'undefined') {
       if(typeof requestObject.validate.code !== 'undefined') {
-        const vErr = validateResponse({code: requestObject.validate.code}, {code: e.response.status});
+        const vErr = validateCode({code: requestObject.validate.code}, {code: e.response.status});
         if(vErr === null) {
           return { 
             isError: false, 
