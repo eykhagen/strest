@@ -1,34 +1,33 @@
 # How to write Test? The Schema
 
-- [`version`](#version) _Required_
-- [`allowInsecure`](#allowInsecure)
+<!-- TOC depthFrom:2 -->
+
+- [`version` **_Required_**](#version-_required_)
 - [`variables`](#variables)
-- [`requests`](#requests) _Required_
-  - [`request`](#request)
-    - [`url`](#url) _Required_
-    - [`method`](#method) _Required_
+- [`allowInsecure`](#allowinsecure)
+- [`requests` **_Required_**](#requests-_required_)
+    - [`request` **_At least one request is required_**](#request-_at-least-one-request-is-required_)
+    - [`url` **_Required_**](#url-_required_)
+    - [`method` **_Required_**](#method-_required_)
+    - [`delay`](#delay)
     - [`data`](#data)
-      - [`json`](#data)
-      - [`params`](#data)
-      - [`raw`](#data)
+        - [`json`](#json)
+        - [`raw`](#raw)
+        - [`params`](#params)
     - [`headers`](#headers)
     - [`validate`](#validate)
-      - ['max_retries'](#validate)
-      - [`code`](#code)
-      - [`raw`](#validate)
-      - [`json`](#validate)
+        - [`code`](#code)
     - [`log`](#log)
-    - [`delay`](#delay)
 
-## Specifications
+<!-- /TOC -->
 
-### `version` **_Required_**
+## `version` **_Required_**
 
 Property specifying the version of the schema. Available versions:
 
 - `1`
 
-### `variables`
+## `variables`
 You can define custom variables to use them later in a request. They work across files, so you can define them in one file and use them in an other.
 
 ```yml
@@ -42,11 +41,11 @@ requests:
     url: Var(example_url)
     ...
     validate:
-      json: 
+      json:
         id: Variable(example_id) # Both, Var() and Variable() are allowed
 ```
 
-### `allowInsecure`
+## `allowInsecure`
 
 Boolean to allow:
 
@@ -62,7 +61,7 @@ someRequest:
   method: ...
 ```
 
-### `requests` **_Required_**
+## `requests` **_Required_**
 
 Array which holds all the requests that are going to be tested
 
@@ -136,6 +135,8 @@ Specify data that you want to be sent with the request. This data can be formatt
 
 However, `params` can always be added. They'll be added to the request's URL.
 
+#### `json`
+
 ```yaml
 # JSON Example
 someRequest:
@@ -147,14 +148,22 @@ someRequest:
       password: test123
       nested:
         nestedKey: false
+```
 
+#### `raw`
+
+```yaml
 # Raw Data Example
 someRequest:
   url: ...
   method: ...
   data:
     raw: 'Some raw data to be sent'
+```
 
+#### `params`
+
+```yaml
 # Params as a string Example
 someRequest:
   url: ...
@@ -202,7 +211,8 @@ someRequest:
 Validate the incoming response either by a specific value or by a [`Type`](VALIDATION.md).
 [More information](README.md#ResponseValidation) about how to validate responses.
 
-### `code` 
+#### `code`
+
 Expect the returned status code to be a specific number or in a range of numbers.
 ```yaml
 # Example (simple)
