@@ -1,16 +1,25 @@
 version: 1
-
+# Using http://jsonpath.com as object and simple testing
 requests:
   jsonpath:
     url: https://jsonplaceholder.typicode.com/posts
     method: POST
     data:
       json:
-        myArray:
-        - foo: 1
-          bar: 1
-        - foo: 2
-          bar: 2
+        firstName: John
+        lastName: doe
+        age: 26
+        address:
+            streetAddress: 'naist street'
+            city: Nara
+            postalCode: 630-0192
+        phoneNumbers:
+            - {type: iPhone, number: 0123-4567-8888}
+            - {type: home, number: 0123-4567-8910}
     validate:
       jsonpath:
-        myArray.1.foo: 2
+        $.phoneNumbers[:1].type: iPhone
+        age: 26
+        $.age: 26
+        address.city: Nara
+        $.phoneNumbers[?(@.type == "home")].number: "0123-4567-8910"
