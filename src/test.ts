@@ -43,7 +43,9 @@ export const performTests = async (testObjects: object[], cmd: any) => {
   // true if the --output curl option was set
   const toCurl = cmd.output == 'curl';
   let curPath = "./";
-  console.log(chalk.blueBright("Executing tests in " + curPath));
+  if(testObjects.length > 1){
+    console.log(chalk.blueBright("Executing tests in " + curPath));
+  }
   for(testObject of testObjects){
   
     if(testObject['allowInsecure']) {
@@ -59,7 +61,7 @@ export const performTests = async (testObjects: object[], cmd: any) => {
       }
     }
   
-    if (curPath != testObject.relativePath){
+    if (curPath != testObject.relativePath && testObjects.length > 1){
       console.log(chalk.blueBright("Executing tests in: " + testObject.relativePath));
     }
     curPath = testObject.relativePath
