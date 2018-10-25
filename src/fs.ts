@@ -15,8 +15,8 @@ var sortPaths = require('sort-paths');
 export const findTestFiles = async (dir: string) => {
   let cwd = process.cwd();
   let isFile = false;
-    // if a custom path was defined
-    if(dir !== null){
+  // if a custom path was defined
+  if(dir !== null){
     cwd = path.join(process.cwd(), dir);
     if(!fs.existsSync(cwd)){
       return null;
