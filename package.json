@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "./tests/test.sh"
+    "test": "strest tests/success"
   },
   "dependencies": {
     "@types/faker": "^4.1.3",
