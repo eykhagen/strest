@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "dist/main.js tests/success"
+    "test": "strest tests/success"
   },
   "dependencies": {
     "@types/faker": "^4.1.3",
