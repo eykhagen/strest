@@ -94,8 +94,7 @@ export const performTests = async (testObjects: object[], cmd: any) => {
             const spinner = ora(`Testing ${chalk.bold(colorizeMain(requestName))}`).start();
             const startTime = new Date().getTime();
             let result = "succeeded"
-
-            let error = computeRequestObject(val, requestReponses);
+            let error = computeRequestObject(val, requestReponses, testObject.fileName);
 
             if(error !== null) {
               // pass
@@ -177,7 +176,7 @@ export const performTests = async (testObjects: object[], cmd: any) => {
  * Take every curly braces and replace the value with the matching response data
  * @param obj Some Object to be tested  
  */
-export const computeRequestObject = (obj: Object, r: any) => {
+export const computeRequestObject = (obj: Object, r: any, currentFilename: string) => {
   // Find everything that matches Value(someValueString)
   const regValue = /Value\((.*?)\)/g
   const regFake = /Fake\((.*?)\)/g
@@ -185,6 +184,7 @@ export const computeRequestObject = (obj: Object, r: any) => {
   const regJsonPath = /JsonPath\{\{(.*?)\}\}/g
   const regLongVar = /Variable\((.*?)\)/g
   const regShortVar = /Var\((.*?)\)/g
+  const regFilename = /Filename\((.*?)\)/g
   const innerReg = /\((.*?)\)/
   const innerHandlebarReg = /\{\{(.*?)\}\}/
   let item: any;
@@ -192,7 +192,7 @@ export const computeRequestObject = (obj: Object, r: any) => {
     let val = (<any>obj)[item];
     if(typeof val === 'object') {
       // be recursive
-      const step: any = computeRequestObject(val, r)
+      const step: any = computeRequestObject(val, r, currentFilename)
       if(step !== null) {
         return step;
       }
@@ -303,6 +303,17 @@ export const computeRequestObject = (obj: Object, r: any) => {
             } catch (e) {
               return e;
             }
+          }
+        });
+      }
+      // find all Filename(...) strings in any item
+      if(regFilename.test(val) === true && currentFilename) {
+        let outterMatch = val.match(regFilename);
+        outterMatch.forEach((m: string) => {
+          try {
+            (<any>obj)[item] = (<any>obj)[item].replace(m, currentFilename.replace('.strest',''));
+          } catch(e) {
+            return e;
           }
         });
       }

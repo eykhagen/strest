@@ -54,7 +54,8 @@ export const Schema = Joi.object({
   version: Joi.number().min(1).max(1),
   requests: Joi.object({}).pattern(/([^\s]+)/, requestsSchema),
   allowInsecure: Joi.boolean().optional(),
-  variables: Joi.object().optional()
+  variables: Joi.object().optional(),
+  fileName: Joi.string().required()
 });
 
 
