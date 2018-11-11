@@ -278,6 +278,28 @@ requests:
     url: https://jsonplaceholder.typicode.com/todos/2
     method: GET
 ```
+## Use strest file name as paramter in the tests
+You can use the strest file name as a parmater in the tests .
+
+*note* that the strest suffix is removed 
+
+**Usage**
+The file name for this example is postman-echo.strest.yml
+
+```yml
+version: 1                            # only version at the moment
+
+requests:                             # all test requests will be listed here
+  testRequest:                        # name the request however you want
+    url: https://Filename().com/get  # required
+    method: GET                       # required
+    data:
+      params:
+        name: Salvador Salva Martín
+    validate:
+      code: 200
+
+```
 
 ## Response Validation
 
