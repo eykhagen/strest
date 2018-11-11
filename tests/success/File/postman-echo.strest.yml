@@ -1,0 +1,11 @@
+version: 1                            # only version at the moment
+
+requests:                             # all test requests will be listed here
+  testFilename:                        # name the request however you want
+    url: https://Filename().com/get  # required
+    method: GET                       # required
+    data:
+      params:
+        name: Salvador Salva Martín
+    validate:
+      code: 200
