@@ -3,14 +3,22 @@ import * as Joi from 'joi';
 const dataSchema = Joi.object().keys({
   json: Joi.object().optional(), // data as JSON Body
   params: Joi.alternatives().try(Joi.string(), Joi.object()).optional(), // data as url-params
-  raw: Joi.string().optional()
+  raw: Joi.string().optional(),
+  form: Joi.object().optional()
 }).min(1).max(2)
   .without('json', 'formUrlEncoded')
-  .without('formUrlEncoded', 'json')
   .without('json', 'raw')
-  .without('raw', 'json')
+  .without('json','form')
+  .without('formUrlEncoded', 'json')
   .without('formUrlEncoded', 'raw')
+  .without('formUrlEncoded','form')
+  .without('raw', 'json')
   .without('raw', 'formUrlEncoded')
+  .without('raw','form')
+  .without('form','json')
+  .without('form','raw')
+  .without('form','formUrlEncoded')
+  
 
 const validateSchema = Joi.object().keys({
   max_retries: Joi.number().optional(),
@@ -19,11 +27,14 @@ const validateSchema = Joi.object().keys({
   json: Joi.object().optional(),
   raw: Joi.alternatives().try(Joi.string().optional(), Joi.string().regex(/^ENV/gmi)).optional(),
   jsonpath: Joi.object().optional(),
+  form: Joi.object().optional(),
 })
   .without('json', 'raw')
   .without('raw', 'json')
   .without('raw', 'jsonpath')
-  .without('jsonpath', 'raw');
+  .without('jsonpath', 'raw')
+  .without('raw','form')
+  .without('form','raw');
 
 const ifSchema = Joi.object().keys({
   operand: Joi.string().required(),
@@ -63,7 +74,8 @@ export const Schema = Joi.object({
 interface requestObjectDataSchema {
   json: object,
   params: object | string ,
-  raw: string
+  raw: string,
+  form: object
 }
 interface basicObjectSchema {
   username: string,

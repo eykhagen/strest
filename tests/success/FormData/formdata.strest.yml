@@ -1,0 +1,17 @@
+version: 1
+
+requests:
+  formData:
+    url: https://jsonplaceholder.typicode.com/posts
+    method: POST
+    headers: 
+      Content-Type: application/json
+    data:
+      form:
+        title: foo
+        body: bar
+        userId: 1
+        sampleFile: File(tests/strest.png)
+    validate:
+      json: 
+        id: Type(Number)

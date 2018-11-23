@@ -278,7 +278,27 @@ requests:
     url: https://jsonplaceholder.typicode.com/todos/2
     method: GET
 ```
+## Sending files and form data
+Sending files and form data is easy. use form type in the data prop.
+```yaml
+version: 1
 
+requests:
+  formData:
+    url: https://jsonplaceholder.typicode.com/posts
+    method: POST
+    headers: 
+      Content-Type: application/json
+    data:
+      form: # Use the form property
+        title: foo
+        body: bar
+        userId: 1
+        sampleFile: File(tests/strest.png) # The form data key for this file will be: sampleFile
+    validate:
+      json: 
+        id: Type(Number)
+```
 ## Response Validation
 
 With **Strest** you can validate responses either by a specific value or by a `Type`. _[List of all valid Types](VALIDATION.md)_

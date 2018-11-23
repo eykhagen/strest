@@ -8,6 +8,10 @@ import { colorizeMain, colorizeCustomRed } from './handler';
 import { requestObjectSchema as requestObjectSchema } from './configSchema';
 import { config } from './configLoader';
 import * as jp from 'jsonpath';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as FormData from 'form-data';
+
 
 require('request-to-curl');
 
@@ -185,6 +189,7 @@ export const computeRequestObject = (obj: Object, r: any) => {
   const regJsonPath = /JsonPath\{\{(.*?)\}\}/g
   const regLongVar = /Variable\((.*?)\)/g
   const regShortVar = /Var\((.*?)\)/g
+  const regFile = /File\((.*?)\)/g
   const innerReg = /\((.*?)\)/
   const innerHandlebarReg = /\{\{(.*?)\}\}/
   let item: any;
@@ -300,6 +305,21 @@ export const computeRequestObject = (obj: Object, r: any) => {
               let correspondingItem = definedVariables[innerMatch[1]];
 
               (<any>obj)[item] = (<any>obj)[item].replace(m, correspondingItem);
+            } catch (e) {
+              return e;
+            }
+          }
+        });
+      }
+      // find all File(...) strings in any item
+      if(regFile.test(val) === true) {
+        let outterMatch = val.match(regFile);
+        outterMatch.forEach((m: string) => {
+          const innerMatch = m.match(innerReg);
+          if(innerMatch !== null) {
+            try {
+              const fileStream = fs.createReadStream(path.resolve(innerMatch[1]));
+              (<any>obj)[item] = fileStream;
             } catch (e) {
               return e;
             }
@@ -604,6 +624,20 @@ const performRequest = async (requestObject: requestObjectSchema, requestName: s
     // raw data
     if(typeof requestObject.data.raw !== 'undefined') {
       axiosObject.data  = requestObject.data.raw;
+    }
+    // form data
+    if(typeof requestObject.data.form !== 'undefined') {
+      const form: FormData = new FormData();
+      Object.entries(requestObject.data.form).forEach(([key, value]) => {
+        if(value instanceof fs.ReadStream){
+          form.append(key, value, { filepath: value.path.toString()});
+        }
+        else{
+          form.append(key, value);
+        }
+      });
+      axiosObject.data  = form;
+      axiosObject.headers = form.getHeaders();
     }
     // params
     if(typeof requestObject.data.params !== 'undefined') {
